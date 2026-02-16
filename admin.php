@@ -31,35 +31,38 @@ if (isset($_POST['tambah_karyawan'])) {
         </div>
 
         <h4 class="mt-4">Laporan Absensi Hari Ini</h4>
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Nama</th>
-                    <th>Tanggal</th>
-                    <th>Jam Masuk</th>
-                    <th>Jam Pulang</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Mengambil data absensi digabung dengan data user
-                $sql = "SELECT users.nama, absensi.tanggal, absensi.jam_masuk, absensi.jam_keluar 
-                        FROM absensi 
-                        JOIN users ON absensi.user_id = users.id 
-                        ORDER BY absensi.id DESC";
-                $result = mysqli_query($koneksi, $sql);
+        <table class="table table-bordered table-striped text-center">
+    <thead class="table-dark">
+        <tr>
+            <th>Nama</th>
+            <th>Tanggal</th>
+            <th>Jam Masuk</th>
+            <th>Jam Pulang</th>
+            <th>Aksi</th> </tr>
+    </thead>
+    <tbody>
+        <?php
+        $sql = "SELECT users.nama, absensi.id, absensi.tanggal, absensi.jam_masuk, absensi.jam_keluar 
+                FROM absensi 
+                JOIN users ON absensi.user_id = users.id 
+                ORDER BY absensi.id DESC";
+        $result = mysqli_query($koneksi, $sql);
 
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>
-                        <td>{$row['nama']}</td>
-                        <td>{$row['tanggal']}</td>
-                        <td>{$row['jam_masuk']}</td>
-                        <td>{$row['jam_keluar']}</td>
-                    </tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<tr>
+                <td>{$row['nama']}</td>
+                <td>{$row['tanggal']}</td>
+                <td>{$row['jam_masuk']}</td>
+                <td>{$row['jam_keluar']}</td>
+                <td>
+                    <a href='edit_absen.php?id={$row['id']}' class='btn btn-sm btn-warning'>Edit</a>
+                    <a href='hapus_absen.php?id={$row['id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
+                </td>
+            </tr>";
+        }
+        ?>
+    </tbody>
+</table>
 
         <div class="card mt-5 p-3 bg-light">
             <h5>Tambah Karyawan Baru</h5>
